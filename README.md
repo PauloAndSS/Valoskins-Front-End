@@ -1,17 +1,19 @@
-# app_valoskins
+# ValoSkins Frontend API
 
-A new Flutter project.
+Este projeto é o **frontend em Flutter/Dart** que consome a API do repositório [valoskinsAPI](https://github.com/Samukaka01/valoskinsAPI).
 
-## Getting Started
+## 🚀 Objetivo
+O app conecta-se ao backend Django REST Framework para listar armas e skins do jogo Valorant, permitindo buscas, filtros e visualização de dados.
 
-This project is a starting point for a Flutter application.
+## 📂 Estrutura
+- `models/` → contém os modelos Dart (`Arma`, `Skin`) que representam os dados vindos da API.
+- `api/valo_skins_api.dart` → responsável pelas chamadas HTTP para o backend.
+- `screens/` → telas do Flutter que exibem os dados.
 
-A few resources to get you started if this is your first Flutter project:
+## 🔧 Configuração
+1. Clone o repositório:
+   ```bash
+   git clone https://github.com/Samukaka01/valoskinsAPI
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+npm install
+(Se falhar usar ) : npx npm install
