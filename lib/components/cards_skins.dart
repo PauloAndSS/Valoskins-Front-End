@@ -9,77 +9,174 @@ class SkinCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => SkinDetailsPage(skin: skin),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isSmall = constraints.maxHeight < 250;
+
+        return InkWell(
+          borderRadius: BorderRadius.circular(20),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => SkinDetailsPage(skin: skin),
+              ),
+            );
+          },
+          child: Card(
+            elevation: 6,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            clipBehavior: Clip.antiAlias,
+            child: Column(
+              children: [
+                // IMAGEM
+                Expanded(
+                  flex: 2,
+                  child: Hero(
+                    tag: skin.icone,
+                    child: Image.network(
+                      skin.icone,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Container(
+                          color: Colors.black26,
+                          child: const Center(
+                            child: Icon(Icons.broken_image,
+                                color: Colors.white70, size: 40),
+                          ),
+                        );
+                      },
+                      loadingBuilder: (context, child, progress) {
+                        if (progress == null) return child;
+                        return const Center(
+                            child: CircularProgressIndicator());
+                      },
+                    ),
+                  ),
+                ),
+
+                // CONTEÚDO
+                Expanded(
+                  flex: 3,
+                  child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(12),
+                    decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [Color(0xFF3B2559), Color(0xFF1E1233)],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // NOME
+                        Text(
+                          skin.nome,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+
+                        const SizedBox(height: 6),
+
+                        // RARIDADE + PACOTE
+                        Row(
+                          children: [
+                            const Icon(Icons.star,
+                                color: Colors.amber, size: 14),
+                            const SizedBox(width: 4),
+                            Flexible(
+                              child: Text(
+                                skin.raridade,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                    color: Colors.white70, fontSize: 12),
+                              ),
+                            ),
+                            if (!isSmall) ...[
+                              const SizedBox(width: 8),
+                              const Icon(Icons.category,
+                                  color: Colors.pinkAccent, size: 14),
+                              const SizedBox(width: 4),
+                              Flexible(
+                                child: Text(
+                                  skin.pacote,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                      color: Colors.white70, fontSize: 12),
+                                ),
+                              ),
+                            ]
+                          ],
+                        ),
+
+                        const SizedBox(height: 6),
+
+                        // PREÇO
+                        Text(
+                          "R\$ ${skin.preco}",
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            color: Color.fromARGB(255, 35, 217, 83),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          ),
+                        ),
+
+                        const Spacer(),
+
+                        // LINHA INFERIOR (RESPONSIVA)
+                        if (!isSmall)
+                          Row(
+                            children: [
+                              const Icon(Icons.sports_martial_arts,
+                                  color: Colors.lightBlueAccent, size: 14),
+                              const SizedBox(width: 4),
+                              Expanded(
+                                child: Text(
+                                  skin.arma.nome.isNotEmpty
+                                      ? skin.arma.nome
+                                      : "Arma desconhecida",
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                      color: Colors.white, fontSize: 12),
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              const Icon(Icons.layers,
+                                  color: Colors.greenAccent, size: 14),
+                              const SizedBox(width: 4),
+                              Expanded(
+                                child: Text(
+                                  skin.arma.categoria.isNotEmpty
+                                      ? skin.arma.categoria
+                                      : "Categoria não definida",
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                      color: Colors.white70, fontSize: 12),
+                                ),
+                              ),
+                            ],
+                          ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         );
       },
-      child: Card(
-        color: const Color(0xFF3B2559),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-        elevation: 5,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ClipRRect(
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
-              child: AspectRatio(
-                aspectRatio: 4 / 3,
-                child: Image.network(
-                  skin.icone,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    skin.nome,
-                    style: const TextStyle(
-                      color: Color(0xFFD92344),
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    "${skin.raridade} • ${skin.pacote}",
-                    style: const TextStyle(
-                      color: Color(0xFFD92353),
-                      fontSize: 13,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    "Preço: ${skin.preco}",
-                    style: const TextStyle(
-                      color: Color(0xFF6F36BF),
-                      fontSize: 13,
-                      fontWeight: FontWeight.w500,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }
